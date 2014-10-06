@@ -44,6 +44,7 @@ void next( int code)
 {
   static status flag = on;
 
+  if ( 0 == pid) return;
   if (flag == on) {
       kill(pid,SIGSTOP);
       flag = off;
@@ -58,14 +59,9 @@ void main(int argc, char *argv[])
     char mess[80];
     int fd;
     int numch;
-
-    pid = fork();
-    if ( pid == 0 )
-        {
-	execl("exec/progA", "progA", NULL);
-             
-        }
-    else { 
+    char par1[30] = "exec/";
+    int lenPar1 = 5;   
+     { 
 
         fd = open("/dev/tty",O_RDWR);
         setblock(fd,false);
@@ -89,8 +85,18 @@ void main(int argc, char *argv[])
               break;
           default: 
 	      fprintf(stderr," %d   <%s>\n",numch,mess);
-          }
+              mess[numch-1] = '\0';
+    	      pid = fork();
+              for( i=0; i< numch;i++) par1[lenPar1+i] = mess[i];
+	      fprintf(stderr," %d   <%s>   <%s>\n",numch,mess,par1);
+              
+    	      if ( pid == 0 )
+        		{		
+			execl(par1, mess, NULL);
+          		}
           fprintf(stderr," in parent\n");
         }
      }
+  }
 }
+
