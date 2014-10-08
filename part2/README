@@ -1,0 +1,21 @@
+Author: Frankie Gauthier (4213091)
+
+Class: CS3790
+
+Part 2 of Assignment 1
+
+---------------------------------------------------------------------------------------------
+
+To compile this program type "make" in the part2 directory
+then type ./sched to run
+
+once the program is running type progA<enter> progB<enter> progC<enter>
+
+the program will cyle between the processes one at a time every 3 seconds. progA prints 'a' repeatedly
+progB prints 'b' repeatedly and so on.
+
+you can type the name of an executable to run as long as it is in the "exec" directory in part2
+
+progA B and C are precompiled  and located in the exec directory for an example.
+
+

@@ -16,11 +16,11 @@ sigset_t sig;
 
 void next( int code)
 {
-      kill(pid[current],SIGSTOP);
-      current++;
-      if (current == 3) current = 0;
+      kill(pid[current],SIGSTOP);		// stop current process 
+      current++;				// increment to next process
+      if (current == 3) current = 0;		// reset the process index 
  
-     kill(pid[current],SIGCONT);
+     kill(pid[current],SIGCONT);		// stop the next process
 }
 
 void main()

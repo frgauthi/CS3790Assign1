@@ -11,7 +11,8 @@ enum boolean { false, true };
 typedef enum boolean boolean;
 
 unsigned  short i = 0;
-int pid;
+int pid[3] = {0};		// create an array for three processes
+int numProcs = 0;		// init index for pid array
 status flag = on;
 
 struct sigaction newhandler, oldhandler;
@@ -42,15 +43,15 @@ void setblock( int fd ,boolean block)
 }
 void next( int code)
 {
-  static status flag = on;
-
-  if (flag == on) {
-      kill(pid,SIGSTOP);
-      flag = off;
-  } else {
-     kill(pid,SIGCONT);
-     flag = on;
- }
+  
+	
+  	if ( 0 == pid[numProcs]) return;	// if in the child return to parent process
+  	
+	kill(pid[numProcs],SIGSTOP);		// stop current process
+	numProcs++;				// increment process pointer
+     	if (numProcs == 3) numProcs =0;		// wraps the array around to the 0th process
+	kill(pid[numProcs],SIGCONT);		// start the next process
+	
 }
 
 void main(int argc, char *argv[])
@@ -58,14 +59,9 @@ void main(int argc, char *argv[])
     char mess[80];
     int fd;
     int numch;
-
-    pid = fork();
-    if ( pid == 0 )
-        {
-	execl("exec/progA", "progA", NULL);
-             
-        }
-    else { 
+    char par1[30] = "exec/";
+    int lenPar1 = 5;   
+     { 
 
         fd = open("/dev/tty",O_RDWR);
         setblock(fd,false);
@@ -89,8 +85,18 @@ void main(int argc, char *argv[])
               break;
           default: 
 	      fprintf(stderr," %d   <%s>\n",numch,mess);
-          }
+              mess[numch-1] = '\0';
+    	      pid[numProcs] = fork();
+              for( i=0; i< numch;i++) par1[lenPar1+i] = mess[i]; // combine the users arguement with the path of exec
+	      fprintf(stderr," %d   <%s>   <%s>\n",numch,mess,par1);
+              
+    	      if ( pid[numProcs] == 0 )			//if in the child process exec the program from user input
+        		{		
+			execl(par1, mess, NULL);
+          		}
           fprintf(stderr," in parent\n");
         }
      }
+  }
 }
+

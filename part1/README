@@ -1,0 +1,16 @@
+Author: Frankie Gauthier (4213091)
+
+Class: CS3790
+
+Part 1 of Assignment1
+
+----------------------------------------------------------------------------------
+
+To compile and run this program type "make" in the part1 directory
+Then type ./sched to run the program.
+
+
+the program forks to create 3 processes which print the process number repeatedly
+
+the output will cyle through each program every 3 seconds.
+
